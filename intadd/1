@@ -1,0 +1,45 @@
+# -*- coding:utf-8 -*-
+__author__ = 'siback'
+
+import requests
+import time
+import re
+import sys
+
+#COOKIE
+
+
+headers = {  'Host': 'uis.sejong.ac.kr',
+	            'Referer': 'http://uis.sejong.ac.kr/app/modules/sch_sug/SugRecordQ.xrf',
+                    'Origin': "http://uis.sejong.ac.kr",
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36',
+                    'Cache-Control': "max-age=0",
+                    'Content-Type': "application/x-www-form-urlencoded",
+                    'Accept-Encoding': 'gzip, deflate',
+                    'Connection': "keep-alive",
+                    'Accept-Language': "ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4",
+                    'Accept': "*/*"
+}
+#data={'xtmPagego':'/app/modules/sch_sug/SugRecordNowQ.xrf','strSubId':'SELF_SUB_30','strCommand':'','strMenuId':'SugRecordNowQ','MENU_SYS_ID':'SELF_STUD','MENU_SUB_ID':'SELF_SUB_30','MENU_MENU_ID':'SCH_SUG05_STUD','MENU_PG_ID':'SugRecordNowQ','MENU_ORGN_CLSF_MAP_CD':'MAP-001','MENU_ORGN_CLSF_CTRL_YN':'Y','MENU_AUTH_DEPTH_CD':'9','MENU_SELF_YN':'Y','MENU_UPD_POSB_YN':'Y','MENU_DWN_POSB_YN':'Y','MENU_HELP_BTN_YN':'N','MENU_HELP_POSB_YN':'N','MENU_MANUAL_BTN_YN':'N','MENU_REMARK':'','MENU_PG_NM':'당학기성적조회','MENU_PG_TITLE':'학부생 학사정보시스템》수업/성적》성적 및 강의평가》당학기성적조회','MENU_PG_TYPE_CD':'Q','MENU_URL':'/app/modules/sch_sug/SugRecordNowQ.xrf','strTarget':'FRAME','param_member_no':'16011115','param_login_dt':'20170626130035','iCnt':'','SEC_YN':''}
+cookies={'COOKIE_MENU_SYS_ID':'400f96014ce59784a850ad5bf3bd0da6','COOKIE_USER_INFO':'7966ff8c6ba924bfa5c1f0a834a2d6a942f294bb14548e5550cfa60cf3d98e8ab52c73b9c3be2542d5b5afb326aaaf8e77f5f032db17a639a157653576f67dfffcb7fa3540b1afc08657f65ae4246998f92b6832c034718e834f293fe92267738acfcd1371f277e401fa9841fdae5b94d1549f9297ca51ff160572c93f1f5bccbd3f5696003bd9fbdf371efbe16e80828966ed7d1944f45c8e031e3dbeceb67560bf5c970fee923e0dec49196a5eed128f2ddbe4ce8361cdaf5d2ef576e3987bbd3f5696003bd9fbdf371efbe16e8082943d2cf1d6021249cc1ddf4922f1f8ba60bf5c970fee923e0dec49196a5eed12d4a3a27f8b44906ea83ea65ad72b4c2e386bfd186958bd6fe8966602e9edd459c0f84a5b0cb622dd2697213ee4d8ed084dff01fcd6d8f7984ee75e6ac6cae85a689d36e7db21f6eb8e5a1b10dfc50b84ec8de7013068a7abe91f95b0909dd26f176d9d5cdc22da13176952a19ec91c924026317f460051a3dab70e4bca6b8d5437f0cd230cb732e012cfea00df7194158ab15274ca5ae2d313433e16bb6c51b8b65edd8dfde0ef7f2165c9e2a0a7aff8', 'MENU_SHOW_YN':'false','SJ_JSESSIONID':'ktlXqA7bzO9uIAUHPNXJLPS4ibdeZa91GrLW5AzgKwt5EG1RG3w4!-491260164'}
+
+
+
+cookie1={'WMONID':'zBfg98gYnzY','ssotoken':'Vy3zFySFx5FGW2zTyGIDx5FSEJONGzCy1498449635zPy86400zAy34zEyZNk0Kx2FLBQej3RX7ASRjbCYXx79WWSheVLcikR69b8Yorax79tPZmk3x7Ax7Ax7AjiqWVeKGeilo879NTM3DM8MfRNFFH5OSFIx7ABHhoRHx792AU3Ex7AwB2XHp4kDip0MsRjux2BFekJx79bXqkPHsA34mnjMjUuJNbNrwn53LrZ6Jtx78OCbGTdGo3S1x2BnbkNXAV0EHTlXx79SkSkdBO6eLCJx7AhtS66UGLcqcRbuZjN4wJJx2FrIcc3x2BhHJx2Bx789m61jM4mKgQ7Oiv1a9wXiuYL9cx7AGE53Q8CkpmLJnfigIH6M3L3vQ6Qc1w6pJQKVV9B3hQE6d8AaFx78Dm9eNx7Aex2FVwIW0HzKyPfOUx78l7DBWrooeArQHvoAgdviFHfKV2mofx2F3i2SiYRgx3DzSSy00000287070zUURy33b0a80a3e9799b4zMyXHx2BrP8NNWHMx3Dz','SJ_JSESSIONID':'XK6vcf2tJYiWDRqTi0ytMdRFELBVkVC8X94uo4B7hnWHENjpxDJD!-491260164','COOKIE_MENU_SYS_ID':'400f96014ce59784a850ad5bf3bd0da6','COOKIE_USER_INFO':'7966ff8c6ba924bfa5c1f0a834a2d6a942f294bb14548e5550cfa60cf3d98e8ab52c73b9c3be2542d5b5afb326aaaf8e77f5f032db17a639a157653576f67dfffcb7fa3540b1afc08657f65ae4246998f92b6832c034718e834f293fe92267738acfcd1371f277e401fa9841fdae5b94d1549f9297ca51ff160572c93f1f5bccbd3f5696003bd9fbdf371efbe16e80828966ed7d1944f45c8e031e3dbeceb67560bf5c970fee923e0dec49196a5eed128f2ddbe4ce8361cdaf5d2ef576e3987bbd3f5696003bd9fbdf371efbe16e8082943d2cf1d6021249cc1ddf4922f1f8ba60bf5c970fee923e0dec49196a5eed12d4a3a27f8b44906ea83ea65ad72b4c2e386bfd186958bd6fe8966602e9edd459c0f84a5b0cb622dd2697213ee4d8ed084dff01fcd6d8f7984ee75e6ac6cae85a689d36e7db21f6eb8e5a1b10dfc50b84ec8de7013068a7abe91f95b0909dd26f176d9d5cdc22da13176952a19ec91c924026317f460051a3dab70e4bca6b8d54a61f796604a407ccf85710aab53a32c74c7f0480831f1a9b10702708716d4beab5ce4edda731ba3cf6a3d9393b51e714','MENU_SHOW_YN':'false','COOKIE_MENU_SYS_ID':'SELF_STUD','XTM_MENU_INFO':'%24MENU_SYS_ID%3DSELF_STUD%26*%24MENU_SUB_ID%3DSELF_SUB_30%26*%24MENU_MENU_ID%3DSCH_SUG05_STUD%26*%24MENU_PG_ID%3DSugRecordNowQ%26*%24MENU_ORGN_CLSF_MAP_CD%3DMAP-001%26*%24MENU_ORGN_CLSF_CTRL_YN%3DY%26*%24MENU_AUTH_DEPTH_CD%3D9%26*%24MENU_SELF_YN%3DY%26*%24MENU_UPD_POSB_YN%3DY%26*%24MENU_DWN_POSB_YN%3DY%26*%24MENU_HELP_BTN_YN%3DN%26*%24MENU_HELP_POSB_YN%3DN%26*%24MENU_MANUAL_BTN_YN%3DN%26*%24MENU_REMARK%3D%26*%24MENU_PG_TYPE_CD%3DQ%26*%24MENU_URL%3D/app/modules/sch_sug/SugRecordNowQ.xrf%26*%24param_member_no%3D16011115%26*%24param_login_dt%3D20170626130035%26*%24MENU_REQUEST_YN%3DY%26*'}
+
+url="http://uis.sejong.ac.kr/app/modules/sch_sud/sch_sud.SudBaseScheSelfServQ.do"
+#url="http://35.189.191.210/test1.php"
+data={'pgauth_sys_id':'SELF_STUD','pgauth_sub_id':'SELF_SUB_20','pgauth_menu_id':'SELF_MENU_10','pgauth_pg_id':'SudBaseScheSelfServQ','pgauth_self_yn':'Y','pgauth_orgn_clsf_map_cd':'MAP-001','pgauth_orgn_clsf_ctrl_yn':'Y','pgauth_auth_depth_cd':'9','pgauth_upd_posb_yn':'Y','pgauth_dwn_posb_yn':'Y','pguser_member_no':'16011115','pguser_login_dt':'20170626130035','pgauth_login_dt':'20170626132656','param_member_no':'16011115','param_login_dt':'','strCommand':'List','strOrgnClsfCd':'20','strYear':'2017','strMonth':'06'}
+
+
+url1="http://uis.sejong.ac.kr/app/modules/sch_sug/sch_sug.SugRecordNowQ.do"
+
+
+data1={'pgauth_sys_id':'SELF_STUD','pgauth_sub_id':'SELF_SUB_30','pgauth_menu_id':'SCH_SUG05_STUD','pgauth_pg_id':'SugRecordNowQ','pgauth_self_yn':'Y','pgauth_orgn_clsf_map_cd':'MAP-001','pgauth_orgn_clsf_ctrl_yn':'Y','pgauth_auth_depth_cd':'9','pgauth_upd_posb_yn':'Y','pgauth_dwn_posb_yn':'Y','pguser_member_no':'16011115','pguser_login_dt':'20170626130035','pgauth_login_dt':'20170626141020','param_member_no':'16011115','param_login_dt':'20170626130035','strCommand':'List','strOrgnClsfCd':'20','strStudentNo':'16011115','strYear':'2017','strSmtCd':'10','keyCuriNo':'','keyYearSmt':'','keySmtCdNm':'','keyRecordYn':'Y','strCorsScheGrpCd':'0','strConOrgn':''}
+
+res=requests.post(url1,data=data1,cookies=cookie1)
+
+print res.text
+
+
+print res.cookies
